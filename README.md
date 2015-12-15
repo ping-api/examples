@@ -8,6 +8,7 @@ Your test scripts will automatically run on global servers to test API, such as 
 + [First test](#first-test)
 + [Initial Script](#initial-script)
 + [Test Script](#test-script)
++ [Storage](#storage)
 + [Set default User-Agent](#set-default-user-agent)
 
 
@@ -35,10 +36,11 @@ The initial script will be run before the each test. You can set common function
 
 ## Test Script
 There are two section of the test case `setup` and `test`. The setup code should be a function and the prefix is `setup`. The test code should be a function and the prefix is `test`.
+#### Test Script (POST /login)
 ```js
 this.setupCaseA = function () {
     /*
-    The setup function of CaseA.
+    The setup function of CaseA. This is optional.
     @return {object}
         params: {object}
             The url query string.
@@ -55,7 +57,8 @@ this.setupCaseA = function () {
             'User-Agent': 'Chrome'
         },
         body: {
-            account: 'my account'
+            account: 'test-account',
+            password: 'password'
         }
     };
 };
@@ -80,6 +83,41 @@ this.testCaseA = function (test, response) {
     var content = JSON.parse(response.body);
     test.ok(!content.error, 'server should not return error messages.');
     test.equal(response.body);
+    test.done();
+};
+```
+
+
+## Storage
+You can use `storage` to pass variable to the next test.
+#### Test Script (POST /login)
+```js
+this.setupCase = function () {
+    return {
+        account: 'test-account',
+        password: 'password'
+    };
+};
+this.testCase = function (test, response) {
+    test.equal(response.statusCode, 200);
+    var content = JSON.parse(response.body);
+    test.ok(content.token);
+    storage.token = content.token;
+    test.done();
+};
+```
+#### Test Script (GET /me)
+```js
+this.setupCase = function () {
+    return {
+        token: storage.token
+    };
+};
+this.testCase = function (test, response) {
+    test.equal(JSON.parse(response.body), {
+        account: 'test-account',
+        id: 1
+    });
     test.done();
 };
 ```
