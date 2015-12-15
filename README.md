@@ -20,7 +20,7 @@ Your test scripts will automatically run on global servers to test API, such as 
 After you create the project, then you can click the `New test` button to create a `test`.  
 You can set the api the uri and the method of the test.  
 Then you can write the test script like this.
-#### Test Script
+#### Test Script: GET /
 ```js
 this.testCase = function (test, response) {
     test.expect(1);  // how many expectations in this test case.
@@ -37,7 +37,7 @@ The initial script will be run before the each test. You can set common function
 
 ## Test Script
 There are two section of the test case `setup` and `test`. The setup code should be a function and the prefix is `setup`. The test code should be a function and the prefix is `test`.
-#### Test Script (POST /login)
+#### Test Script: POST /login
 ```js
 this.setupCaseA = function () {
     /*
@@ -90,7 +90,7 @@ this.testCaseA = function (test, response) {
 
 ## Storage
 You can use `storage` to pass variable to the next test.
-#### Test Script (POST /login)
+#### Test Script: POST /login
 ```js
 this.setupCase = function () {
     return {
@@ -108,7 +108,7 @@ this.testCase = function (test, response) {
     test.done();
 };
 ```
-#### Test Script (GET /me)
+#### Test Script: GET /me
 ```js
 this.setupCase = function () {
     return {
@@ -128,7 +128,7 @@ this.testCase = function (test, response) {
 
 
 ## Variable API path
-#### Test Script (GET /users/{userId})
+#### Test Script: GET /users/{userId}
 ```js
 this.setupCase = function () {
     return {
