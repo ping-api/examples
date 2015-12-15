@@ -95,8 +95,10 @@ You can use `storage` to pass variable to the next test.
 ```js
 this.setupCase = function () {
     return {
-        account: 'test-account',
-        password: 'password'
+        body: {
+            account: 'test-account',
+            password: 'password'
+        }
     };
 };
 this.testCase = function (test, response) {
@@ -111,7 +113,9 @@ this.testCase = function (test, response) {
 ```js
 this.setupCase = function () {
     return {
-        token: storage.token
+        params: {
+            token: storage.token
+        }
     };
 };
 this.testCase = function (test, response) {
