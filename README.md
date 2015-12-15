@@ -68,7 +68,7 @@ this.testCaseA = function (test, response) {
         equal: {function} arguments: actual{any}, expected{any}, message{string}
             Test with the equal comparison operator ( === ).
         done: {funnction}
-            Call this method when all test cases was done.
+            Call this method when the test case was done.
     @params response {Response}
         statusCode: {number}
         headers: {object}  // all keys are lowercase
