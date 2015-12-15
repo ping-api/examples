@@ -83,7 +83,6 @@ this.testCaseA = function (test, response) {
     test.equal(response.statusCode, 200, 'response status should be 200.');
     var content = JSON.parse(response.body);
     test.ok(!content.error, 'server should not return error messages.');
-    test.equal(response.body);
     test.done();
 };
 ```
