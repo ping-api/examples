@@ -9,6 +9,7 @@ Your test scripts will automatically run on global servers to test API, such as 
 + [Initial Script](#initial-script)
 + [Test Script](#test-script)
 + [Storage](#storage)
++ [Variable API path](#variable-api-path)
 + [Set default User-Agent](#set-default-user-agent)
 
 
@@ -118,6 +119,22 @@ this.testCase = function (test, response) {
         account: 'test-account',
         id: 1
     });
+    test.done();
+};
+```
+
+
+## Variable API path
+#### Test Script (GET /users/{userId})
+```js
+this.setupCase = function () {
+    return {
+        params: {
+            userId: '550e8400-e29b-41d4-a716-446655440000'
+        }
+    };
+};
+this.testCase = function (test) {
     test.done();
 };
 ```
