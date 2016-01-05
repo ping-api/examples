@@ -11,6 +11,8 @@ Your test scripts will automatically run on global servers to test API, such as 
 + [Storage](#storage)
 + [Variable API path](#variable-api-path)
 + [Set default User-Agent](#set-default-user-agent)
++ [Request Content-Type](#request-content-type)
++ [Multi test case](#multi-test-case)
 
 
 ---
@@ -18,9 +20,9 @@ Your test scripts will automatically run on global servers to test API, such as 
 
 ## First test
 After you create the project, then you can click the `New test` button to create a `test`.  
-You can set the api the uri and the method of the test.  
+You can set the method, uri, headers, parameters and request body of the test.  
 Then you can write the test script like this.
-#### Test Script: GET /
+##### Test Script: GET /
 ```js
 this.testCase = function (test, response) {
     test.expect(1);  // how many expectations in this test case.
@@ -37,7 +39,7 @@ The initial script will be run before the each test. You can set common function
 
 ## Test Script
 There are two section of the test case `setup` and `test`. The setup code should be a function and the prefix is `setup`. The test code should be a function and the prefix is `test`.
-#### Test Script: POST /login
+##### Test Script: POST /login
 ```js
 this.setupCaseA = function () {
     /*
@@ -48,7 +50,7 @@ this.setupCaseA = function () {
         headers: {object}
         body: {object|string}
             If the body is object Ping-API will convert to JSON at default.
-            Set 'Content-Type': 'x-www-form-urlencoded' at headers Ping-API will convert to unlencoded form.
+            Set 'Content-Type': 'application/x-www-form-urlencoded' at headers Ping-API will convert to unl-encoded form.
     */
     return {
         params: {
@@ -90,7 +92,7 @@ this.testCaseA = function (test, response) {
 
 ## Storage
 You can use `storage` to pass variable to the next test.
-#### Test Script: POST /login
+##### Test Script: POST /login
 ```js
 this.setupCase = function () {
     return {
@@ -108,7 +110,7 @@ this.testCase = function (test, response) {
     test.done();
 };
 ```
-#### Test Script: GET /me
+##### Test Script: GET /me
 ```js
 this.setupCase = function () {
     return {
@@ -128,7 +130,7 @@ this.testCase = function (test, response) {
 
 
 ## Variable API path
-#### Test Script: GET /users/{userId}
+##### Test Script: GET /users/{userId}
 ```js
 this.setupCase = function () {
     return {
@@ -145,9 +147,80 @@ this.testCase = function (test) {
 
 ## Set default User-Agent
 All of test requests will append this user-agent at header.
-#### Initial Script
+##### Initial Script
 ```js
 storage.headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Chrome/46.0.2490.80'
 };
 ```
+
+
+## Request Content-Type
+Ping-API provides `application/x-www-form-urlencoded` and `application/json` of request content type.
+##### Test Script: POST /login
+```js
+// application/x-www-form-urlencoded request
+this.setupCase = function () {
+    return {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: {
+            account: 'test-account',
+            password: 'password'
+        }
+    };
+};
+this.testCase = function (test, response) {
+    test.equal(response.statusCode, 200);
+    test.done();
+};
+```
+```js
+// application/json request
+this.setupCase = function () {
+    return {
+        body: {
+            account: 'test-account',
+            password: 'password'
+        }
+    };
+};
+this.testCase = function (test, response) {
+    test.equal(response.statusCode, 200);
+    test.done();
+};
+```
+
+
+## Multi test case
+You could write multi test case at one uri.
+##### Test Script: POST /login
+```js
+this.setupSuccessCase = function () {
+    return {
+        body: {
+            account: 'test-account',
+            password: 'password'
+        }
+    };
+};
+this.testSuccessCase = function (test, response) {
+    test.equal(response.statusCode, 200);
+    test.done();
+};
+
+this.setupFailureCase = function () {
+    return {
+        body: {
+            account: 'not-exist-account',
+            password: 'password'
+        }
+    };
+};
+this.testFailureCase = function (test, response) {
+    test.equal(response.statusCode, 400);
+    test.done();
+};
+```
+
